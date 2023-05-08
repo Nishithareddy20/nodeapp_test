@@ -1,49 +1,27 @@
 pipeline {
 
   environment {
-    dockerimagename = "thetips4you/nodeapp"
+    dockerimagename = "nishitha20/app"
     dockerImage = ""
   }
 
-  agent any
-
-  stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'https://github.com/shazforiot/nodeapp_test.git'
-      }
+  agent any{
+    stages{
+    stage('source clone'){
+       git branch: 'master', credentialsId: 'github', url: 'https://github.com/Nishithareddy20/nodeapp_test.git'
     }
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
-        }
-      }
+    
+    stage('docker build'){
+         sh 'docker build -t nishitha20/app Dockerfile'
     }
-
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'dockerhublogin'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("latest")
-          }
-        }
-      }
+    stage('docker login'){
+        sh 'docker push nishitha20/app
     }
-
-    stage('Deploying App to Kubernetes') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
-        }
-      }
+    stage('k8 apply'){
+        sh 'kubectl apply -f deploymentservice.yml'
     }
-
-  }
-
+    
 }
+  }
+}
+
