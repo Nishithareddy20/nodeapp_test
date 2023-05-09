@@ -5,7 +5,7 @@ pipeline {
     dockerImage = ""
   }
 
-  agent any{
+  agent any
     stages{
     stage('source clone'){
        git branch: 'master', credentialsId: 'github', url: 'https://github.com/Nishithareddy20/nodeapp_test.git'
