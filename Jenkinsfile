@@ -15,7 +15,7 @@ pipeline {
          sh 'docker build -t nishitha20/app Dockerfile'
     }
     stage('docker login'){
-        sh 'docker push nishitha20/app
+        sh 'docker push nishitha20/app'
     }
     stage('k8 apply'){
         sh 'kubectl apply -f deploymentservice.yml'
